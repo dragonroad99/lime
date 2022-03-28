@@ -1,9 +1,14 @@
 #!/bin/bash
+rm -rf out
+rm -rf AnyKernel
 echo "Cloning dependencies"
+sudo apt update
+sudo apt upgrade
+sudo apt install --no-install-recommends -y bc bison curl ccache ca-certificates flex gcc git glibc-doc jq libxml2 libtinfo5 libc6-dev libssl-dev libstdc++6 make openssl python rclone ssh tar tzdata wget zip
 git clone --depth=1 https://github.com/kdrag0n/proton-clang clang
 git clone --depth=1 https://github.com/LineageOS/android_prebuilts_gcc_linux-x86_aarch64_aarch64-linux-android-4.9 gcc
 git clone --depth=1 https://github.com/LineageOS/android_prebuilts_gcc_linux-x86_arm_arm-linux-androideabi-4.9 gcc32
-git clone https://github.com/sm6115-dev/AnyKernel3.git  --depth=1 AnyKernel
+git clone https://github.com/dragonroad99/AnyKernel3  --depth=1 AnyKernel
 
 echo "Done"
 KERNEL_DIR=$(pwd)
@@ -12,8 +17,8 @@ TANGGAL=$(date +"%Y%m%d-%H")
 BRANCH="$(git rev-parse --abbrev-ref HEAD)"
 PATH="${KERNEL_DIR}/clang/bin:${KERNEL_DIR}/gcc/bin:${KERNEL_DIR}/gcc32/bin:${PATH}"
 export ARCH=arm64
-export KBUILD_BUILD_USER=gagan
-export KBUILD_BUILD_HOST=malvi
+export KBUILD_BUILD_USER=Fadhil_M
+export KBUILD_BUILD_HOST=The_Emperror
 
 make O=out ARCH=arm64 vendor/bengal-perf_defconfig
 
@@ -24,7 +29,9 @@ compile() {
                     CC=clang \
                     CLANG_TRIPLE=aarch64-linux-gnu- \
                     CROSS_COMPILE=aarch64-linux-android- \
-                    CROSS_COMPILE_ARM32=arm-linux-androideabi- $1 $2 $3
+                    CROSS_COMPILE_ARM32=arm-linux-androideabi- $1 $2 $3 \
+                    LLVM=1 \
+                    LD=ld.lld
 }
 
 
@@ -43,7 +50,7 @@ zipping() {
     cp ../out/arch/arm64/boot/Image .
     cp ../out/arch/arm64/boot/dtb.img .
     cp ../out/arch/arm64/boot/dtbo.img .
-    zip -r9 CartelProject-lime-BETA-${TANGGAL}.zip *
+    zip -r9 DarkForce-Unity-juice-${TANGGAL}.zip *
     cd ..
 }
 
